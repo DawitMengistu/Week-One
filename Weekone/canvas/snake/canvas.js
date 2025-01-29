@@ -5,10 +5,11 @@ const sizeX = 400;
 const sizeY = 400;
 const gridGap = 20;
 
-let speed = 10;
 let state = "";
 let snake = [[((sizeX / gridGap) / 2) * 20, ((sizeX / gridGap) / 2) * 20], [200, 220]]
-let food = [5, 5]
+
+let food;
+makeFoodAtRandom();
 
 canvas.width = sizeX;
 canvas.height = sizeY;
@@ -40,19 +41,23 @@ function renderGrid() {
 renderSnake();
 
 function renderSnake() {
+
     c.clearRect(0, 0, canvas.width, canvas.height);
     renderGrid();
 
+
+    c.fillStyle = "#17f360";
+    c.fillRect(food[0] * gridGap, food[1] * gridGap, gridGap, gridGap);
+
     for (let x = 0; x < snake.length; x++) {
-        c.fillStyle = x % 2 ? "gray" : "green";
+        c.fillStyle = x % 2 ? "#F32F17" : "black";
         c.fillRect(snake[x][0], snake[x][1], gridGap, gridGap);
     }
 
-    c.fillStyle = "red";
-    c.fillRect(food[0] * gridGap, food[1] * gridGap, gridGap, gridGap);
+
 
 }
-let moveInterval = 50;
+let moveInterval = 170;
 let animationId = null;
 let lastTimeUp = 0, lastTimeRight = 0, lastTimeLeft = 0, lastTimeDown = 0;
 
@@ -62,9 +67,14 @@ function calMoveUp(snake, timestamp) {
         if (snake[0][1] > 0) {
             let prSateX = snake[0][0];
             let prSateY = snake[0][1];
+
+
+            if (snake[0][1] == food[1] * gridGap && snake[0][0] == food[0] * gridGap) onFood();
             snake[0][1] -= gridGap;
 
             for (let i = 1; i < snake.length; i++) {
+                calOnSelf(i);
+
                 const tempX = snake[i][0];
                 const tempY = snake[i][1];
 
@@ -77,9 +87,12 @@ function calMoveUp(snake, timestamp) {
 
             }
             renderSnake();
+
             lastTimeUp = timestamp;
         } else {
             cancelAnimationFrame(animationId);
+            alert("Game Over!")
+            reset();
             return;
         }
     }
@@ -92,9 +105,14 @@ function calMoveRight(snake, timestamp) {
         if (snake[0][0] < sizeX - gridGap) {
             let prSateX = snake[0][0];
             let prSateY = snake[0][1];
+
+
+            if (snake[0][1] == food[1] * gridGap && snake[0][0] == food[0] * gridGap) onFood();
             snake[0][0] += gridGap;
 
             for (let i = 1; i < snake.length; i++) {
+                calOnSelf(i);
+
                 const tempX = snake[i][0];
                 const tempY = snake[i][1];
 
@@ -114,6 +132,7 @@ function calMoveRight(snake, timestamp) {
         } else {
             cancelAnimationFrame(animationId);
             alert("Game Over");
+            reset();
             return;
         }
     }
@@ -127,9 +146,14 @@ function calMoveLeft(snake, timestamp) {
         if (snake[0][0] > 0) {
             let prSateX = snake[0][0];
             let prSateY = snake[0][1];
+
+
+            if (snake[0][1] == food[1] * gridGap && snake[0][0] == food[0] * gridGap) onFood();
             snake[0][0] -= gridGap;
 
             for (let i = 1; i < snake.length; i++) {
+                calOnSelf(i);
+
                 const tempX = snake[i][0];
                 const tempY = snake[i][1];
 
@@ -148,6 +172,7 @@ function calMoveLeft(snake, timestamp) {
         } else {
             cancelAnimationFrame(animationId);
             alert("Game Over");
+            reset();
             return;
         }
     }
@@ -161,9 +186,15 @@ function calMoveDown(snake, timestamp) {
 
             let prSateX = snake[0][0];
             let prSateY = snake[0][1];
+
+
+            if (snake[0][1] == food[1] * gridGap && snake[0][0] == food[0] * gridGap) onFood();
             snake[0][1] += gridGap;
+            let head = snake[0];
 
             for (let i = 1; i < snake.length; i++) {
+                calOnSelf(i);
+
                 const tempX = snake[i][0];
                 const tempY = snake[i][1];
 
@@ -180,6 +211,7 @@ function calMoveDown(snake, timestamp) {
         } else {
             cancelAnimationFrame(animationId);
             alert("Game Over!")
+            reset();
             return;
         }
     }
@@ -207,23 +239,66 @@ function moveDownWard() {
     animationId = requestAnimationFrame((timestamp) => calMoveDown(snake, timestamp));
 }
 
-console.log(snake, "<--")
 
-function addSizeRandom(state) {
-    // if (state == 'up') {
-    console.log(snake[snake.length - 1], "<-- last index");
-    snake.push([200, 240]);
-
-    // }
+function addSize(state) {
+    if (state == 'up') {
+        snake.push([snake[snake.length - 1][0], snake[snake.length - 1][1] + (gridGap)]);
+    } else if (state == "down") {
+        snake.push([snake[snake.length - 1][0], snake[snake.length - 1][1] - (gridGap)]);
+    } else if (state == "right") {
+        snake.push([snake[snake.length - 1][0] + (gridGap), snake[snake.length - 1][1]]);
+    } else if (state == "left") {
+        snake.push([snake[snake.length - 1][0] - (gridGap), snake[snake.length - 1][1]]);
+    }
 }
 
-addSizeRandom();
-renderSnake();
+
+function onFood() {
+
+    addSize(state);
+    makeFoodAtRandom();
+    renderSnake();
+
+    moveInterval -= Math.max(1, Math.floor(moveInterval * 0.05));
 
 
+}
 
 
+function makeFoodAtRandom() {
+    let x = Math.floor(Math.random() * (sizeX / gridGap));
+    let y = Math.floor(Math.random() * (sizeY / gridGap));
+
+    while (snake.some(segment => segment[0] === x && segment[1] === y)) {
+        x = Math.floor(Math.random() * (sizeX / gridGap));
+        y = Math.floor(Math.random() * (sizeY / gridGap));
+    }
+    food = [x, y];
+}
+
+function calOnSelf(i) {
+    let head = snake[0];
+    if (head[0] === snake[i][0] && head[1] === snake[i][1]) {
+        alert("Game Over: Snake hit itself!");
+        reset();
+        return true;
+    }
+    return false;
+}
+
+
+function reset() {
+    moveInterval = 170;
+    state = "";
+    snake = [[((sizeX / gridGap) / 2) * 20, ((sizeX / gridGap) / 2) * 20], [200, 220]]
+    makeFoodAtRandom();
+
+    renderSnake();
+}
+let prInterval = moveInterval;
 document.addEventListener("keydown", (event) => {
+    moveInterval = prInterval;
+
     if (state !== "down" && event.key === "ArrowUp") {
         moveUpWard();
         state = "up"
@@ -237,6 +312,13 @@ document.addEventListener("keydown", (event) => {
         moveLeftSide();
         state = "left"
     }
+
 });
 
+
+
+for (let i = 0; i < 15; i++) {
+    addSize("up")
+    renderSnake();
+}
 
