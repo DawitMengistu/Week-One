@@ -259,7 +259,7 @@ function onFood() {
     makeFoodAtRandom();
     renderSnake();
 
-    moveInterval -= Math.max(1, Math.floor(moveInterval * 0.05));
+    moveInterval -= Math.max(1, Math.floor(moveInterval * 0.2));
 
 
 }
@@ -297,7 +297,7 @@ function reset() {
 }
 let prInterval = moveInterval;
 document.addEventListener("keydown", (event) => {
-    moveInterval = prInterval;
+
 
     if (state !== "down" && event.key === "ArrowUp") {
         moveUpWard();
