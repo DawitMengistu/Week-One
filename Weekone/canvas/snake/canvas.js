@@ -316,9 +316,3 @@ document.addEventListener("keydown", (event) => {
 });
 
 
-
-for (let i = 0; i < 15; i++) {
-    addSize("up")
-    renderSnake();
-}
-
