@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekone | Canavas</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="nav-bar">
+        <img class="qene-img" src="qenelogo.png" alt="">
+        <a href="https://github.com/DawitMengistu/Week-One/tree/main/Weekone/canvas/snake" class="source-link">Source
+            Code</a>
+
+    </div>
+    <canvas id="canvas"></canvas>
+    <div class="menu-con">
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+            <div class="color-picker" style="width: 50px; height: 50px; background: red; cursor: pointer;"
+                onclick="setColor('red')"></div>
+            <div class="color-picker" style="width: 50px; height: 50px; background: blue; cursor: pointer;"
+                onclick="setColor('blue')"></div>
+            <div class="color-picker" style="width: 50px; height: 50px; background: green; cursor: pointer;"
+                onclick="setColor('green')"></div>
+            <div class="color-picker" style="width: 50px; height: 50px; background: yellow; cursor: pointer;"
+                onclick="setColor('yellow')"></div>
+            <div class="color-picker"
+                style="width: 50px; height: 50px; border: 2px solid black; background: whitesmoke; cursor: pointer;"
+                onclick="setColor('white')"></div>
+        </div>
+        <div class="range-con">
+            <input type="range" min="2" max="20" value="4" id="sizeSlider" oninput="setSize(this.value)">
+        </div>
+
+    </div>
+
+
+    <script src="canvas.js"></script>
+</body>
+
+</html>

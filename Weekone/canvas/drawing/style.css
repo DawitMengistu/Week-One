@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    pad: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: whitesmoke;
+
+}
+
+#canvas {
+    right: calc(50% - 300px);
+    top: calc(50% - 300px);
+    position: absolute;
+    ;
+    border: 2px solid #121212;
+}
+
+.qene-img {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.source-link {
+    color: blue;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    text-decoration: none;
+}
+
+.source-link:hover {
+    font-family: 'Poppins', sans-serif;
+    color: lightblue;
+}
+
+.menu-con {
+    position: absolute;
+    right: 0;
+    bottom: 100px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+#sizeSlider {
+    writing-mode: bt-lr;
+    transform: rotate(270deg);
+}
+
+.range-con {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
