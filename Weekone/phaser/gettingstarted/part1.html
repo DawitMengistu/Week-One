@@ -88,6 +88,10 @@
 
 
         function preload() {
+            this.load.audio('background', 'assets/bg-music.mp3')
+            this.load.audio('star', 'assets/star.wav')
+
+
             this.load.image('sky', 'assets/sky.png');
             this.load.image('ground', 'assets/platform.png');
             this.load.image('star', 'assets/star.png');
@@ -103,7 +107,25 @@
         var score = 0;
         var scoreText;
 
+        var backgroundSound;
+        var starSound;
+
+
         function create() {
+            // sound
+            backgroundSound = this.sound.add('background');
+            starSound = this.sound.add('star');
+
+
+            // Play background sound in a loop
+            backgroundSound.play({ loop: true });
+
+            this.soundEffect = this.sound.add('background');
+            this.soundEffect.play({ loop: true });
+
+            this.soundEffect = this.sound.add('star');
+
+
             // sky
             this.add.image(400, 300, 'sky');
 
@@ -182,7 +204,7 @@
             star.disableBody(true, true);
 
             score += 10;
-
+            starSound.play();
             if (score == 12 * 10) scoreText.setText('Game Over');
             else scoreText.setText('Score: ' + score);
         }
